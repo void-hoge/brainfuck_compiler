@@ -11,7 +11,11 @@ def run(code, input_string=''):
     ost = io.StringIO()
     print()
     print(code)
-    dp, data = brainfuck(code, ist, ost)
+    dp, data, step = brainfuck(code, ist, ost)
+    print(f'Execution successfully finished in {step} steps.')
+    print(f'data: {data}')
+    print(f'out : {ost.getvalue()}')
+    print(f'dp  : {dp}')
     return ost.getvalue(), dp, data
 
 class TestBF(unittest.TestCase):
@@ -196,16 +200,17 @@ class TestBF(unittest.TestCase):
     def test_17_sm_non_destructive_multiply2(self):
         sm = StackMachine()
         code = 'sm mulnd2\n'
-        code += sm.load_constant(2)
+        code += sm.load_constant(5)
         code += mvp(2) + '\n'
         sm.dp += 2
-        code += sm.load_constant(3)
+        code += sm.load_constant(51)
         code += mvp(2) + '\n'
         sm.dp += 2
         code += sm.non_destructive_multiply(0, 3)
         out, dp, data = run(code)
-        self.assertEqual([2,0,0,3,0,0,6,0,0,0], data)
+        self.assertEqual([5,0,0,51,0,0,255,0,0,0], data)
         self.assertEqual(7, dp)
+
 
 if __name__ == '__main__':
     unittest.main()
