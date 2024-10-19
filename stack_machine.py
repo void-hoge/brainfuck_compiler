@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
+
 def sanitize(num):
     if num < 0:
         return f'neg{-num}'
     else:
         return f'{num}'
+
 
 def mvp(num):
     if num < 0:
@@ -12,11 +14,13 @@ def mvp(num):
     else:
         return '>' * num
 
+
 def inc(num):
     if num < 0:
         return '-' * -num
     else:
         return '+' * num
+
 
 def multi_dst_add(dsts):
     '''Distribute data[dp] to data[dp + i] for i in DSTS.
@@ -36,9 +40,9 @@ def multi_dst_add(dsts):
     code += f'{mvp(-ret)}]'
     return code
 
+
 def multi_dst_subtract(dsts):
-    '''Same as multi_dst_add but it subtract.
-    '''
+    '''Same as multi_dst_add but it subtract.'''
     assert dsts
     assert 0 not in dsts
     data = sorted(set(dsts))
@@ -52,6 +56,7 @@ def multi_dst_subtract(dsts):
         code += f'{mvp(diff)}-'
     code += f'{mvp(-ret)}]'
     return code
+
 
 class StackMachine:
     def __init__(self):

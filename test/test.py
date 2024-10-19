@@ -6,6 +6,7 @@ from interpreter import *
 import subprocess
 import io
 
+
 def run(code, input_string=''):
     ist = io.StringIO(input_string)
     ost = io.StringIO()
@@ -18,27 +19,28 @@ def run(code, input_string=''):
     print(f'dp  : {dp}')
     return ost.getvalue(), dp, data
 
+
 class TestBF(unittest.TestCase):
     def test_00_move_value1(self):
         code = 'move value1\n'
         code += '+++++\n'
         code += multi_dst_add([1])
         out, dp, data = run(code)
-        self.assertEqual([0,5], data)
+        self.assertEqual([0, 5], data)
 
     def test_01_move_value2(self):
         code = 'move value2\n'
         code += '+++++\n'
         code += multi_dst_add([2])
         out, dp, data = run(code)
-        self.assertEqual([0,0,5], data)
+        self.assertEqual([0, 0, 5], data)
 
     def test_02_move_value3(self):
         code = 'move value3\n'
         code += '+++++\n'
-        code += multi_dst_add([1,2])
+        code += multi_dst_add([1, 2])
         out, dp, data = run(code)
-        self.assertEqual([0,5,5], data)
+        self.assertEqual([0, 5, 5], data)
 
     def test_03_sm_load_constant(self):
         sm = StackMachine()
@@ -46,7 +48,7 @@ class TestBF(unittest.TestCase):
         code += sm.load_constant(ord('@'))
         code += sm.put_character()
         out, dp, data = run(code)
-        self.assertEqual([ord('@'),0], data)
+        self.assertEqual([ord('@'), 0], data)
         self.assertEqual('@', out)
 
     def test_04_sm_move_variable1(self):
@@ -162,7 +164,7 @@ class TestBF(unittest.TestCase):
             code += sm.add()
         out, dp, data = run(code)
         self.assertEqual('112358', out)
-        self.assertEqual([1,1,2,3,5,8,13,21,0,0], data)
+        self.assertEqual([1, 1, 2, 3, 5, 8, 13, 21, 0, 0], data)
         self.assertEqual(8, dp)
 
     def test_14_sm_multiply1(self):
@@ -172,7 +174,7 @@ class TestBF(unittest.TestCase):
         code += sm.load_constant(2)
         code += sm.multiply()
         out, dp, data = run(code)
-        self.assertEqual([6,0,0,0], data)
+        self.assertEqual([6, 0, 0, 0], data)
         self.assertEqual(1, dp)
 
     def test_15_sm_multiply2(self):
@@ -184,7 +186,7 @@ class TestBF(unittest.TestCase):
         code += sm.multiply()
         code += sm.multiply()
         out, dp, data = run(code)
-        self.assertEqual([6,0,0,0,0], data)
+        self.assertEqual([6, 0, 0, 0, 0], data)
         self.assertEqual(1, dp)
 
     def test_16_sm_non_destructive_multiply1(self):
@@ -194,7 +196,7 @@ class TestBF(unittest.TestCase):
         code += sm.load_constant(3)
         code += sm.non_destructive_multiply(0, 1)
         out, dp, data = run(code)
-        self.assertEqual([2,3,6,0,0,0], data)
+        self.assertEqual([2, 3, 6, 0, 0, 0], data)
         self.assertEqual(3, dp)
 
     def test_17_sm_non_destructive_multiply2(self):
@@ -208,7 +210,7 @@ class TestBF(unittest.TestCase):
         code += sm.load_constant(0)
         code += sm.non_destructive_multiply(0, 3)
         out, dp, data = run(code)
-        self.assertEqual([5,0,0,51,0,0,255,0,0,0], data)
+        self.assertEqual([5, 0, 0, 51, 0, 0, 255, 0, 0, 0], data)
         self.assertEqual(7, dp)
 
     def test_18_sm_bool1(self):
@@ -217,8 +219,8 @@ class TestBF(unittest.TestCase):
         code += sm.load_constant(10)
         code += sm.boolean()
         out, dp, data = run(code)
-        self.assertEqual([1,0], data)
-        self.assertEqual(1, dp) 
+        self.assertEqual([1, 0], data)
+        self.assertEqual(1, dp)
 
     def test_19_sm_bool2(self):
         sm = StackMachine()
@@ -226,8 +228,8 @@ class TestBF(unittest.TestCase):
         code += sm.load_constant(0)
         code += sm.boolean()
         out, dp, data = run(code)
-        self.assertEqual([0,0], data)
-        self.assertEqual(1, dp) 
+        self.assertEqual([0, 0], data)
+        self.assertEqual(1, dp)
 
     def test_20_sm_bool1(self):
         sm = StackMachine()
@@ -238,7 +240,7 @@ class TestBF(unittest.TestCase):
         code += sm.load_constant(1)
         code += sm.non_destructive_boolean(0)
         out, dp, data = run(code)
-        self.assertEqual([10,1,1,1,1,0], data)
+        self.assertEqual([10, 1, 1, 1, 1, 0], data)
         self.assertEqual(5, dp)
 
     def test_21_sm_bool2(self):
@@ -250,8 +252,8 @@ class TestBF(unittest.TestCase):
         code += sm.load_constant(1)
         code += sm.non_destructive_boolean(0)
         out, dp, data = run(code)
-        self.assertEqual([0,1,1,1,0,0], data)
-        self.assertEqual(5, dp) 
+        self.assertEqual([0, 1, 1, 1, 0, 0], data)
+        self.assertEqual(5, dp)
 
 
 if __name__ == '__main__':

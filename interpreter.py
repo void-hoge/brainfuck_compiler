@@ -2,6 +2,7 @@
 
 import sys
 
+
 def brainfuck(prog, ist=sys.stdin, ost=sys.stdout):
     ip = 0
     dp = 0
@@ -48,4 +49,4 @@ def brainfuck(prog, ist=sys.stdin, ost=sys.stdout):
                         cnt -= 1
         ip += 1
         step += 1
-    return dp, data[0:maxdp+1], step
+    return dp, data[0 : maxdp + 1], step
