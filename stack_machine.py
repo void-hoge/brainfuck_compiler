@@ -129,10 +129,26 @@ class StackMachine:
 
     def multiply(self):
         '''Multiply and pop two stack top bytes, and push the result to the stack top.
-        data[dp - 2] = data[dp - 2] + data[dp - 1]; data[dp - 1] = 0; dp--
+        data[dp - 2] = data[dp - 2] * data[dp - 1]; data[dp] = 0; data[dp - 1] = 0; dp--
         '''
         assert 1 < self.dp
         code = 'mul:'
+        code += '[-]>[-]<<'
+        code += '[-<'
+        code += multi_dst_add([2, 3])
+        code += '>>>'
+        code += multi_dst_add([-3])
+        code += '<<]'
+        code += '<[-]>>'
+        code += multi_dst_add([-2])
+        code += '<'
+        self.dp -= 1
+        return code + '\n'
+
+    def non_destructive_multiply(self, pos1, pos2):
+        '''Multiply bytes of POS1 and POS2, push to the stack top.
+        data[dp] = data[pos1] + data[pos2]; data[dp + 1] = 0; data[dp + 2] = 0; dp++
+        '''
 
     def non_destructive_add(self, pos1, pos2):
         '''Add bytes of POS1 and POS2, push to the stack top.

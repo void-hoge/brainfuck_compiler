@@ -161,6 +161,28 @@ class TestBF(unittest.TestCase):
         self.assertEqual([1,1,2,3,5,8,13,21,0,0], data)
         self.assertEqual(8, dp)
 
+    def test_14_sm_multiply1(self):
+        sm = StackMachine()
+        code = 'sm mul1\n'
+        code += sm.load_constant(3)
+        code += sm.load_constant(2)
+        code += sm.multiply()
+        out, dp, data = run(code)
+        self.assertEqual([6,0,0,0], data)
+        self.assertEqual(1, dp)
+
+    def test_15_sm_multiply2(self):
+        sm = StackMachine()
+        code = 'sm mul2\n'
+        code += sm.load_constant(1)
+        code += sm.load_constant(2)
+        code += sm.load_constant(3)
+        code += sm.multiply()
+        code += sm.multiply()
+        out, dp, data = run(code)
+        self.assertEqual([6,0,0,0,0], data)
+        self.assertEqual(1, dp)
+
 
 if __name__ == '__main__':
     unittest.main()
