@@ -108,7 +108,7 @@ class StackMachine:
         return code + '\n'
 
     def add(self):
-        '''Add and pop two stack top bytes, and push to the stack top.
+        '''Add and pop two stack top bytes, and push the result to the stack top.
         data[dp - 2] = data[dp - 2] + data[dp - 1]; data[dp - 1] = 0; dp--
         '''
         assert 1 < self.dp
@@ -127,8 +127,15 @@ class StackMachine:
         self.dp -= 1
         return code + '\n'
 
+    def multiply(self):
+        '''Multiply and pop two stack top bytes, and push the result to the stack top.
+        data[dp - 2] = data[dp - 2] + data[dp - 1]; data[dp - 1] = 0; dp--
+        '''
+        assert 1 < self.dp
+        code = 'mul:'
+
     def non_destructive_add(self, pos1, pos2):
-        '''Add a byte of POS1 and POS2, push to the stack top.
+        '''Add bytes of POS1 and POS2, push to the stack top.
         data[dp] = data[pos1] + data[pos2]; data[dp + 1] = 0; data[dp + 2] = 0; dp++
         '''
         assert pos1 != pos2
@@ -152,7 +159,7 @@ class StackMachine:
         return code
 
     def non_destructive_subtract(self, pos1, pos2):
-        '''Subtract a byte of POS2 from a byte of POS1, push to the stack top.
+        '''Subtract a byte of POS2 from POS1, push to the stack top.
         data[dp] = data[pos1] - data[pos2]; data[dp + 1] = 0; data[dp + 2] = 0; dp++
         '''
         assert pos1 != pos2
