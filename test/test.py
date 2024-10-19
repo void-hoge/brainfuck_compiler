@@ -183,6 +183,29 @@ class TestBF(unittest.TestCase):
         self.assertEqual([6,0,0,0,0], data)
         self.assertEqual(1, dp)
 
+    def test_16_sm_non_destructive_multiply1(self):
+        sm = StackMachine()
+        code = 'sm mulnd1\n'
+        code += sm.load_constant(2)
+        code += sm.load_constant(3)
+        code += sm.non_destructive_multiply(0, 1)
+        out, dp, data = run(code)
+        self.assertEqual([2,3,6,0,0,0], data)
+        self.assertEqual(3, dp)
+
+    def test_17_sm_non_destructive_multiply2(self):
+        sm = StackMachine()
+        code = 'sm mulnd2\n'
+        code += sm.load_constant(2)
+        code += mvp(2) + '\n'
+        sm.dp += 2
+        code += sm.load_constant(3)
+        code += mvp(2) + '\n'
+        sm.dp += 2
+        code += sm.non_destructive_multiply(0, 3)
+        out, dp, data = run(code)
+        self.assertEqual([2,0,0,3,0,0,6,0,0,0], data)
+        self.assertEqual(7, dp)
 
 if __name__ == '__main__':
     unittest.main()
