@@ -13,7 +13,15 @@
   - data[dp - 2] = data[dp - 2] + data[dp - 1]; data[dp - 1] = 0; dp--
 - sub
   - data[dp - 2] = data[dp - 2] - data[dp - 1]; data[dp - 1] = 0; dp--
+- mul
+  - data[dp - 2] = data[dp - 2] * data[dp - 1]; data[dp] = 0; data[dp - 1] = 0; dp--
 - addnd
   - data[dp] = data[pos1] + data[pos2]; data[dp + 1] = 0; data[dp + 2] = 0; dp++
 - subnd
   - data[dp] = data[pos1] - data[pos2]; data[dp + 1] = 0; data[dp + 2] = 0; dp++
+- mulnd
+  - data[dp] = data[pos1] + data[pos2]; data[dp + 1] = 0; data[dp + 2] = 0; data[dp + 3] = 0; data[dp + 2] = 0; dp++
+- bool
+  - data[dp - 1] = data[dp - 1] ? 1 : 0
+- boolnd
+  - data[dp] = data[dp - 1] ? 1 : 0; data[dp + 1] = 0; dp++

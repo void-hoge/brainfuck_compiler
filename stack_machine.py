@@ -145,40 +145,6 @@ class StackMachine:
         self.dp -= 1
         return code + '\n'
 
-    def non_destructive_multiply(self, pos1, pos2):
-        '''Multiply bytes of POS1 and POS2, push to the stack top.
-        data[dp] = data[pos1] + data[pos2]; data[dp + 1] = 0; data[dp + 2] = 0; data[dp + 3] = 0; data[dp + 2] = 0; dp++
-        '''
-        assert pos1 != pos2
-        assert 0 <= pos1
-        assert 0 <= pos2
-        rpos1 = pos1 - self.dp
-        rpos2 = pos2 - self.dp
-        code = f'mulnd {pos1} {pos2}:'
-        code += '[-]>[-]>[-]>[-]<<<'
-        # copy from pos1 to dp
-        code += mvp(rpos1)
-        code += multi_dst_add([-rpos1, -rpos1 + 1])
-        code += mvp(-rpos1 + 1)
-        code += multi_dst_add([rpos1 - 1])
-        # copy from pos2 to dp + 1
-        code += mvp(rpos2 - 1)
-        code += multi_dst_add([-rpos2 + 1, -rpos2 + 2])
-        code += mvp(-rpos2 + 2)
-        code += multi_dst_add([rpos2 - 2])
-        # multiply stacktop
-        code += '<'
-        code += '[-<'
-        code += multi_dst_add([2, 3])
-        code += '>>>'
-        code += multi_dst_add([-3])
-        code += '<<]'
-        code += '<[-]>>'
-        code += multi_dst_add([-2])
-        code += '<'
-        self.dp += 1
-        return code
-
     def non_destructive_add(self, pos1, pos2):
         '''Add bytes of POS1 and POS2, push to the stack top.
         data[dp] = data[pos1] + data[pos2]; data[dp + 1] = 0; data[dp + 2] = 0; dp++
@@ -226,3 +192,66 @@ class StackMachine:
         code += multi_dst_subtract([-1])
         self.dp += 1
         return code
+
+    def non_destructive_multiply(self, pos1, pos2):
+        '''Multiply bytes of POS1 and POS2, push to the stack top.
+        data[dp] = data[pos1] + data[pos2]; data[dp + 1] = 0; data[dp + 2] = 0; data[dp + 3] = 0; data[dp + 2] = 0; dp++
+        '''
+        assert pos1 != pos2
+        assert 0 <= pos1
+        assert 0 <= pos2
+        rpos1 = pos1 - self.dp
+        rpos2 = pos2 - self.dp
+        code = f'mulnd {pos1} {pos2}:'
+        code += '[-]>[-]>[-]>[-]<<<'
+        # copy from pos1 to dp
+        code += mvp(rpos1)
+        code += multi_dst_add([-rpos1, -rpos1 + 1])
+        code += mvp(-rpos1 + 1)
+        code += multi_dst_add([rpos1 - 1])
+        # copy from pos2 to dp + 1
+        code += mvp(rpos2 - 1)
+        code += multi_dst_add([-rpos2 + 1, -rpos2 + 2])
+        code += mvp(-rpos2 + 2)
+        code += multi_dst_add([rpos2 - 2])
+        # multiply stacktop
+        code += '<'
+        code += '[-<'
+        code += multi_dst_add([2, 3])
+        code += '>>>'
+        code += multi_dst_add([-3])
+        code += '<<]'
+        code += '<[-]>>'
+        code += multi_dst_add([-2])
+        code += '<'
+        self.dp += 1
+        return code + '\n'
+
+    def boolean(self):
+        '''Pop the stack top byte, if it is 0, push 0. Otherwise push 1.
+        data[dp - 1] = data[dp - 1] ? 1 : 0
+        '''
+        assert self.dp > 0
+        code = 'bool:'
+        code += '[-]'
+        code += '<[[-]>+<]'
+        code += '>'
+        code += multi_dst_add([-1])
+        return code + '\n'
+
+    def non_destructive_boolean(self, pos):
+        '''If a byte of POS is 0, push 0. Otherwise push 1.
+        data[dp] = data[dp - 1] ? 1 : 0; data[dp + 1] = 0; dp++
+        '''
+        assert 0 <= pos
+        rpos = pos - self.dp
+        code = f'boolnd {pos}:'
+        code += '[-]>[-]<'
+        code += mvp(rpos)
+        code += multi_dst_add([-rpos, -rpos + 1])
+        code += mvp(-rpos + 1)
+        code += multi_dst_add([rpos - 1])
+        code += '<[[-]>+<]'
+        code += '>'
+        code += multi_dst_add([-1])
+        return code + '\n'

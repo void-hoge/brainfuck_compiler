@@ -62,8 +62,8 @@ class TestBF(unittest.TestCase):
         sm = StackMachine()
         code = 'sm_move_variable2\n'
         code += sm.load_constant(ord('@'))
-        code += mvp(10) + '\n'
-        sm.dp += 10
+        for _ in range(10):
+            code += sm.load_constant(0)
         code += sm.move(0)
         out, dp, data = run(code)
         self.assertEqual([0] * 11 + [ord('@'), 0], data)
@@ -112,11 +112,11 @@ class TestBF(unittest.TestCase):
         sm = StackMachine()
         code = 'sm addr 2\n'
         code += sm.load_constant(2)
-        code += mvp(2) + '\n'
-        sm.dp += 2
+        code += sm.load_constant(0)
+        code += sm.load_constant(0)
         code += sm.load_constant(1)
-        code += mvp(2) + '\n'
-        sm.dp += 2
+        code += sm.load_constant(0)
+        code += sm.load_constant(0)
         code += sm.non_destructive_add(0, 3)
         out, dp, data = run(code)
         self.assertEqual([2, 0, 0, 1, 0, 0, 3, 0, 0], data)
@@ -136,11 +136,11 @@ class TestBF(unittest.TestCase):
         sm = StackMachine()
         code = 'sm subr 2\n'
         code += sm.load_constant(1)
-        code += mvp(2) + '\n'
-        sm.dp += 2
+        code += sm.load_constant(0)
+        code += sm.load_constant(0)
         code += sm.load_constant(2)
-        code += mvp(2) + '\n'
-        sm.dp += 2
+        code += sm.load_constant(0)
+        code += sm.load_constant(0)
         code += sm.non_destructive_subtract(3, 0)
         out, dp, data = run(code)
         self.assertEqual([1, 0, 0, 2, 0, 0, 1, 0, 0], data)
@@ -201,15 +201,57 @@ class TestBF(unittest.TestCase):
         sm = StackMachine()
         code = 'sm mulnd2\n'
         code += sm.load_constant(5)
-        code += mvp(2) + '\n'
-        sm.dp += 2
+        code += sm.load_constant(0)
+        code += sm.load_constant(0)
         code += sm.load_constant(51)
-        code += mvp(2) + '\n'
-        sm.dp += 2
+        code += sm.load_constant(0)
+        code += sm.load_constant(0)
         code += sm.non_destructive_multiply(0, 3)
         out, dp, data = run(code)
         self.assertEqual([5,0,0,51,0,0,255,0,0,0], data)
         self.assertEqual(7, dp)
+
+    def test_18_sm_bool1(self):
+        sm = StackMachine()
+        code = 'sm bool1\n'
+        code += sm.load_constant(10)
+        code += sm.boolean()
+        out, dp, data = run(code)
+        self.assertEqual([1,0], data)
+        self.assertEqual(1, dp) 
+
+    def test_19_sm_bool2(self):
+        sm = StackMachine()
+        code = 'sm bool2\n'
+        code += sm.load_constant(0)
+        code += sm.boolean()
+        out, dp, data = run(code)
+        self.assertEqual([0,0], data)
+        self.assertEqual(1, dp) 
+
+    def test_20_sm_bool1(self):
+        sm = StackMachine()
+        code = 'sm boolnd1\n'
+        code += sm.load_constant(10)
+        code += sm.load_constant(1)
+        code += sm.load_constant(1)
+        code += sm.load_constant(1)
+        code += sm.non_destructive_boolean(0)
+        out, dp, data = run(code)
+        self.assertEqual([10,1,1,1,1,0], data)
+        self.assertEqual(5, dp)
+
+    def test_21_sm_bool2(self):
+        sm = StackMachine()
+        code = 'sm boolnd2\n'
+        code += sm.load_constant(0)
+        code += sm.load_constant(1)
+        code += sm.load_constant(1)
+        code += sm.load_constant(1)
+        code += sm.non_destructive_boolean(0)
+        out, dp, data = run(code)
+        self.assertEqual([0,1,1,1,0,0], data)
+        self.assertEqual(5, dp) 
 
 
 if __name__ == '__main__':
