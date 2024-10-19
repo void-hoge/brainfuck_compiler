@@ -147,7 +147,7 @@ class StackMachine:
 
     def non_destructive_multiply(self, pos1, pos2):
         '''Multiply bytes of POS1 and POS2, push to the stack top.
-        data[dp] = data[pos1] + data[pos2]; data[dp + 1] = 0; data[dp + 2] = 0; dp++
+        data[dp] = data[pos1] + data[pos2]; data[dp + 1] = 0; data[dp + 2] = 0; data[dp + 3] = 0; data[dp + 2] = 0; dp++
         '''
         assert pos1 != pos2
         assert 0 <= pos1
@@ -188,7 +188,7 @@ class StackMachine:
         assert 0 <= pos2
         rpos1 = pos1 - self.dp
         rpos2 = pos2 - self.dp
-        code = f'addnd {sanitize(rpos1)} {sanitize(rpos2)}:'
+        code = f'addnd {pos1} {pos2}:'
         code += '[-]>[-]>[-]<<'
         code += mvp(rpos1)
         code += multi_dst_add([-rpos1, -rpos1 + 1])
@@ -212,7 +212,7 @@ class StackMachine:
         assert 0 <= pos2
         rpos1 = pos1 - self.dp
         rpos2 = pos2 - self.dp
-        code = f'subnd {sanitize(rpos1)} {sanitize(rpos2)}:'
+        code = f'subnd {pos1} {pos2}:'
         code += '[-]>[-]>[-]<<'
         code += mvp(rpos1)
         code += multi_dst_add([-rpos1, -rpos1 + 1])
