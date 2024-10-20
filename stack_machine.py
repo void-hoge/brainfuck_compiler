@@ -61,6 +61,7 @@ def multi_dst_subtract(dsts):
 class StackMachine:
     def __init__(self):
         self.dp = 0
+        self.controlstack = []
 
     def load_constant(self, value):
         '''Load constant and push to the stack top.
@@ -259,4 +260,18 @@ class StackMachine:
         code += '<[[-]>+<]'
         code += '>'
         code += multi_dst_add([-1])
+        return code + '\n'
+
+    def beginwhile(self):
+        assert 0 < self.dp
+        self.controlstack += [self.dp]
+        return 'beginwhile:<[>\n'
+
+    def endwhile(self):
+        assert 0 < self.dp
+        assert self.controlstack
+        assert self.controlstack[-1] <= self.dp
+        code = 'endwhile:'
+        code += mvp(self.controlstack[-1] - self.dp - 1) + ']>'
+        self.dp = self.controlstack.pop()
         return code + '\n'

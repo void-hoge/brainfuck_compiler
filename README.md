@@ -25,3 +25,5 @@
   - data[dp - 1] = data[dp - 1] ? 1 : 0
 - boolnd
   - data[dp] = data[dp - 1] ? 1 : 0; data[dp + 1] = 0; dp++
+- beginwhile
+- endwhile

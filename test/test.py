@@ -255,6 +255,36 @@ class TestBF(unittest.TestCase):
         self.assertEqual([0, 1, 1, 1, 0, 0], data)
         self.assertEqual(5, dp)
 
+    def test_22_sm_while1(self):
+        sm = StackMachine()
+        code = 'sm while1\n'
+        code += sm.load_constant(10)
+        code += sm.beginwhile()
+        code += sm.load_constant(1)
+        code += sm.subtract()
+        code += sm.endwhile()
+        out, dp, data = run(code)
+        self.assertEqual([0, 0, 0], data)
+        self.assertEqual(1, dp)
+
+    def test_23_sm_while2(self):
+        sm = StackMachine()
+        code = 'sm while2\n'
+        code += sm.load_constant(100)
+        code += sm.beginwhile()
+        code += sm.load_constant(1)
+        code += sm.subtract()
+        code += sm.load_constant(100)
+        code += sm.beginwhile()
+        code += sm.load_constant(1)
+        code += sm.subtract()
+        code += sm.endwhile()
+        code += sm.endwhile()
+        self.assertEqual(sm.controlstack, [])
+        out, dp, data = run(code)
+        self.assertEqual([0, 0, 0, 0], data)
+        self.assertEqual(1, dp)
+
 
 if __name__ == '__main__':
     unittest.main()
